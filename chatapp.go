@@ -14,6 +14,8 @@ import (
 // Should look like path
 const websocketRoom = "/chat"
 
+var connections = make(map[string]socketio.Socket)
+
 func main() {
 	lastMessages := []string{}
 	var lmMutex sync.Mutex
@@ -28,7 +30,11 @@ func main() {
 
 	sio.On("connection", func(so socketio.Socket) {
 		var username string
+		var token = "Token-" + so.Id()
 		username = "User-" + so.Id()
+		connections[token] = so
+		log.Println("number of connections: ", len(connections))
+		log.Println("number of connections: ", sio.Count())
 		log.Println("on connection", username)
 		so.Join(websocketRoom)
 
@@ -69,6 +75,7 @@ func main() {
 			so.BroadcastTo(websocketRoom, "message", string(jsonRes))
 		})
 		so.On("disconnection", func() {
+			delete(connections, token)
 			log.Println("on disconnect", username)
 		})
 	})
