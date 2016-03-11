@@ -10,7 +10,7 @@ angular.module('chatWebApp')
         var Notification = window.Notification || window.mozNotification || window.webkitNotification;
 
         socket.forward('message', $scope);
-        $scope.$on('socket:message', function (ev, data) {
+        $scope.$on('mana:message', function (ev, data) {
             if ($scope.messages.length > 100) {
                 $scope.messages.splice(0, 1);
             }
