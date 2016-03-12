@@ -45,6 +45,12 @@ angular.module('chatWebApp')
             $scope.newMessage = '';
         };
 
+        $scope.sendDireactMessage = function () {
+            socket.emit('direct_message', $scope.newMessage);
+            $scope.messages.push($scope.newMessage);
+            $scope.newMessage = '';
+        };
+
         $scope.setUsername = function () {
             $scope.username = $scope.inputUsername;
             socket.emit('joined_message', $scope.username);

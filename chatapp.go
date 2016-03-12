@@ -30,10 +30,7 @@ func main() {
 
 	sio.On("connection", func(so socketio.Socket) {
 		var username string
-		var token = "Token-" + so.Id()
 		username = "User-" + so.Id()
-		connections[token] = so
-		log.Println("number of connections: ", len(connections))
 		log.Println("number of connections: ", sio.Count())
 		log.Println("on connection", username)
 		so.Join(websocketRoom)
@@ -46,6 +43,7 @@ func main() {
 
 		so.On("joined_message", func(message string) {
 			username = message
+			connections[username] = so
 			log.Println("joined_message", message)
 			res := map[string]interface{}{
 				"username": username,
@@ -74,8 +72,24 @@ func main() {
 			so.Emit("message", string(jsonRes))
 			so.BroadcastTo(websocketRoom, "message", string(jsonRes))
 		})
+		so.On("direct_message", func(message string) {
+			log.Println("send direct message to kk")
+			res := map[string]interface{}{
+				"username": username,
+				"message":  message,
+				"dateTime": time.Now().UTC().Format(time.RFC3339),
+				"type":     "message",
+			}
+			jsonRes, _ := json.Marshal(res)
+			so.Emit("message", string(jsonRes))
+			if connections["kk"] != nil {
+				connections["kk"].Emit("message", string(jsonRes))
+			} else {
+				log.Println("kk is not existed")
+			}
+		})
 		so.On("disconnection", func() {
-			delete(connections, token)
+			delete(connections, username)
 			log.Println("on disconnect", username)
 		})
 	})

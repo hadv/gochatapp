@@ -3,7 +3,8 @@
 angular.module('chatWebApp')
   .factory('socket', ['socketFactory', function(socketFactory) {
     var socket = socketFactory({
-      prefix: 'mana:'
+      prefix: 'mana:',
+      ioSocket: io.connect()
     });
     socket.forward('error');
     return socket;
