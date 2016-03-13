@@ -46,7 +46,10 @@ angular.module('chatWebApp')
         };
 
         $scope.sendDireactMessage = function () {
-            socket.emit('direct_message', $scope.newMessage);
+            socket.emit('direct_message', JSON.stringify({
+              to: 'kk',
+              message: $scope.newMessage
+            }));
             $scope.messages.push($scope.newMessage);
             $scope.newMessage = '';
         };

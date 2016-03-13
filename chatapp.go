@@ -72,20 +72,24 @@ func main() {
 			so.Emit("message", string(jsonRes))
 			so.BroadcastTo(websocketRoom, "message", string(jsonRes))
 		})
-		so.On("direct_message", func(message string) {
-			log.Println("send direct message to kk")
+		so.On("direct_message", func(data string) {
+			log.Println("send direct message to a user", data)
+			var dat map[string]interface{}
+			if err := json.Unmarshal([]byte(data), &dat); err != nil {
+				log.Println(err)
+			}
 			res := map[string]interface{}{
-				"username": username,
-				"message":  message,
+				"username": dat["to"].(string),
+				"message":  dat["message"].(string),
 				"dateTime": time.Now().UTC().Format(time.RFC3339),
 				"type":     "message",
 			}
 			jsonRes, _ := json.Marshal(res)
 			so.Emit("message", string(jsonRes))
-			if connections["kk"] != nil {
-				connections["kk"].Emit("message", string(jsonRes))
+			if connections[dat["to"].(string)] != nil {
+				connections[dat["to"].(string)].Emit("message", string(jsonRes))
 			} else {
-				log.Println("kk is not existed")
+				log.Println(dat["to"], "is not existed")
 			}
 		})
 		so.On("disconnection", func() {
