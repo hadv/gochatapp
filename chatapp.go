@@ -79,7 +79,7 @@ func main() {
 				log.Println(err)
 			}
 			res := map[string]interface{}{
-				"username": dat["to"].(string),
+				"username": username,
 				"message":  dat["message"].(string),
 				"dateTime": time.Now().UTC().Format(time.RFC3339),
 				"type":     "message",
