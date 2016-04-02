@@ -52,6 +52,7 @@ var _ = Describe("Chat", func() {
 					return
 				}
 			})
+
 			It("join chat sucessfully", func() {
 				socket.Emit("joined_message", "hadv")
 				c := make(chan string, 0)
