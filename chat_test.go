@@ -4,12 +4,11 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
+	"encoding/json"
 	"fmt"
 	"github.com/googollee/go-socket.io"
 	"github.com/zhouhui8915/go-socket.io-client"
 	"net/http"
-	"os"
-	"encoding/json"
 )
 
 var _ = Describe("Chat", func() {
@@ -23,13 +22,7 @@ var _ = Describe("Chat", func() {
 		}
 		http.Handle("/socket.io/", server)
 
-		var listen string = os.Getenv("LISTEN")
-
-		if listen == "" {
-			listen = ":8080"
-		}
-
-		go http.ListenAndServe(listen, nil)
+		go http.ListenAndServe(":8888", nil)
 	})
 
 	AfterEach(func() {
@@ -46,7 +39,7 @@ var _ = Describe("Chat", func() {
 					Transport: "websocket",
 					Query:     make(map[string]string),
 				}
-				socket, err = socketio_client.NewClient("http://localhost:8080", opts)
+				socket, err = socketio_client.NewClient("http://localhost:8888", opts)
 				if err != nil {
 					fmt.Println("Error", err.Error())
 					return

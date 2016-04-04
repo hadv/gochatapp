@@ -41,7 +41,7 @@ func NewChatServer() (*socketio.Server, error) {
 			log.Println("joined_message", message)
 			res := map[string]interface{}{
 				"username": username,
-				"dateTime": time.Now().UTC().Format(time.RFC3339Nano),
+				"dateTime": time.Now().UTC(),
 				"type":     "joined_message",
 			}
 			jsonRes, _ := json.Marshal(res)
@@ -54,7 +54,7 @@ func NewChatServer() (*socketio.Server, error) {
 			res := map[string]interface{}{
 				"username": username,
 				"message":  message,
-				"dateTime": time.Now().UTC().Format(time.RFC3339),
+				"dateTime": time.Now().UTC(),
 				"type":     "message",
 			}
 			jsonRes, _ := json.Marshal(res)
@@ -77,7 +77,7 @@ func NewChatServer() (*socketio.Server, error) {
 			res := map[string]interface{}{
 				"username": username,
 				"message":  dat["message"].(string),
-				"dateTime": time.Now().UTC().Format(time.RFC3339),
+				"dateTime": time.Now().UTC(),
 				"type":     "message",
 			}
 			jsonRes, _ := json.Marshal(res)
