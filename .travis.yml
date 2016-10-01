@@ -1,9 +1,10 @@
 language: go
 
 go:
-  - 1.7
+  - 1.5
 
 sudo: required
 
 script:
-  - go test -v -cover ./...
+  - go build
+
