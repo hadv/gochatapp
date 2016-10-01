@@ -41,14 +41,13 @@ var _ = Describe("Chat", func() {
 				}
 				socket, err = socketio_client.NewClient("http://localhost:8888", opts)
 				if err != nil {
-					fmt.Println("Error", err.Error())
-					return
+					Fail("cannot create socket client")
 				}
 			})
 
-			It("join chat sucessfully", func() {
+			It("join chat sucessfully", func(done Done) {
 				socket.Emit("joined_message", "hadv")
-				c := make(chan string, 0)
+				c := make(chan string)
 				socket.On("message", func(msg string) {
 					c <- msg
 				})
@@ -60,7 +59,8 @@ var _ = Describe("Chat", func() {
 				}
 				Expect(dat["type"]).To(Equal("joined_message"))
 				Expect(dat["username"]).To(Equal("hadv"))
-			})
+				close(done)
+			}, 0.2)
 		})
 	})
 })
