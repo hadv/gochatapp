@@ -1,6 +1,7 @@
 gochatapp
 ===================================================
 
+[![Build Status](https://travis-ci.org/hadv/gochatapp.svg?branch=master)](https://travis-ci.org/hadv/gochatapp)
 
 Go and Angular.js Chat Application using Socket.io
 
